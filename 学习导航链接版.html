@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨大仙软件导航</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色和字体
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .nav-item {
+                @apply px-3 py-2 rounded-md transition-colors duration-200 hover:bg-primary/10;
+            }
+            .category-title {
+                @apply text-xl font-bold mb-4 text-dark dark:text-white flex items-center gap-2;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col">
+    <!-- 导航栏 -->
+    <header class="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa fa-graduation-cap text-primary text-2xl"></i>
+                <h1 class="text-xl md:text-2xl font-bold text-primary">墨大仙软件导航</h1>
+            </div>
+            
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="#teacher-tools" class="nav-item">教师提效</a>
+                <a href="#digital-tools" class="nav-item">数字素养</a>
+                <a href="#security-tools" class="nav-item">网络安全</a>
+                <a href="#class-tools" class="nav-item">课堂互动</a>
+                <a href="#shortcut-tools" class="nav-item">快捷键</a>
+                <a href="#ai-models" class="nav-item">AI大模型</a>
+                <a href="#ai-image" class="nav-item">AI图像</a>
+                <a href="#ai-code" class="nav-item">AI编程</a>
+            </nav>
+            
+            <!-- 主题切换按钮 -->
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <i class="fa fa-moon-o dark:hidden"></i>
+                <i class="fa fa-sun-o hidden dark:inline"></i>
+            </button>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+            <div class="container mx-auto px-4 py-2 flex flex-col">
+                <a href="#teacher-tools" class="nav-item">教师提效工具</a>
+                <a href="#digital-tools" class="nav-item">数字素养工具</a>
+                <a href="#security-tools" class="nav-item">网络安全教学工具</a>
+                <a href="#class-tools" class="nav-item">课堂互动工具</a>
+                <a href="#shortcut-tools" class="nav-item">快捷键导航</a>
+                <a href="#ai-models" class="nav-item">AI大模型</a>
+                <a href="#ai-image" class="nav-item">AI图像工具</a>
+                <a href="#ai-code" class="nav-item">AI编程工具</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主横幅 -->
+    <section class="bg-gradient-to-r from-primary to-blue-700 text-white py-12 md:py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4">教育工作者的实用工具集合</h2>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">
+                精心挑选的各类教学辅助工具，助力教学效率提升与数字化转型
+            </p>
+            <div class="mt-8">
+                <div class="relative max-w-md mx-auto">
+                    <input type="text" id="search-input" placeholder="搜索工具..." class="w-full px-5 py-3 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800">
+                    <button id="search-button" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-white text-primary p-2 rounded-full">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主内容区 -->
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+        <!-- 工具分类统计 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-10">
+            <h3 class="text-lg font-semibold mb-4">工具分类概览</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+                <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 text-center">
+                    <p class="text-primary font-bold text-xl mb-1" id="teacher-count">0</p>
+                    <p class="text-sm">教师提效</p>
+                </div>
+                <div class="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 text-center">
+                    <p class="text-green-600 dark:text-green-400 font-bold text-xl mb-1" id="digital-count">0</p>
+                    <p class="text-sm">数字素养</p>
+                </div>
+                <div class="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4 text-center">
+                    <p class="text-purple-600 dark:text-purple-400 font-bold text-xl mb-1" id="security-count">0</p>
+                    <p class="text-sm">网络安全</p>
+                </div>
+                <div class="bg-yellow-50 dark:bg-yellow-900/30 rounded-lg p-4 text-center">
+                    <p class="text-yellow-600 dark:text-yellow-400 font-bold text-xl mb-1" id="class-count">0</p>
+                    <p class="text-sm">课堂互动</p>
+                </div>
+                <div class="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-4 text-center">
+                    <p class="text-orange-600 dark:text-orange-400 font-bold text-xl mb-1" id="shortcut-count">0</p>
+                    <p class="text-sm">快捷键</p>
+                </div>
+                <div class="bg-red-50 dark:bg-red-900/30 rounded-lg p-4 text-center">
+                    <p class="text-red-600 dark:text-red-400 font-bold text-xl mb-1" id="ai-models-count">0</p>
+                    <p class="text-sm">AI大模型</p>
+                </div>
+                <div class="bg-indigo-50 dark:bg-indigo-900/30 rounded-lg p-4 text-center">
+                    <p class="text-indigo-600 dark:text-indigo-400 font-bold text-xl mb-1" id="ai-image-count">0</p>
+                    <p class="text-sm">AI图像</p>
+                </div>
+                <div class="bg-pink-50 dark:bg-pink-900/30 rounded-lg p-4 text-center">
+                    <p class="text-pink-600 dark:text-pink-400 font-bold text-xl mb-1" id="ai-code-count">0</p>
+                    <p class="text-sm">AI编程</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 教师提效工具 -->
+        <section id="teacher-tools" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-briefcase text-primary"></i>教师提效工具
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="teacher-tools-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- 数字素养工具 -->
+        <section id="digital-tools" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-laptop text-green-600"></i>数字素养工具
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="digital-tools-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- 网络安全教学工具 -->
+        <section id="security-tools" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-shield text-purple-600"></i>网络安全教学工具
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="security-tools-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- 课堂互动工具 -->
+        <section id="class-tools" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-comments text-yellow-600"></i>课堂互动工具
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="class-tools-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- 快捷键导航 -->
+        <section id="shortcut-tools" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-keyboard-o text-orange-600"></i>快捷键导航
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="shortcut-tools-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- AI大模型 -->
+        <section id="ai-models" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-brain text-red-600"></i>AI大模型
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="ai-models-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- AI图像工具 -->
+        <section id="ai-image" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-picture-o text-indigo-600"></i>AI图像工具
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="ai-image-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+
+        <!-- AI编程工具 -->
+        <section id="ai-code" class="mb-12 scroll-mt-20">
+            <h2 class="category-title">
+                <i class="fa fa-code text-pink-600"></i>AI编程工具
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="ai-code-container">
+                <!-- 工具卡片将通过JS动态生成 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fa fa-graduation-cap"></i>学习导航
+                    </h3>
+                    <p class="text-gray-400">
+                        为教育工作者提供实用、高效的教学辅助工具，助力教育数字化转型。
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">快速链接</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#teacher-tools" class="hover:text-white transition-colors">教师提效工具</a></li>
+                        <li><a href="#digital-tools" class="hover:text-white transition-colors">数字素养工具</a></li>
+                        <li><a href="#security-tools" class="hover:text-white transition-colors">网络安全教学工具</a></li>
+                        <li><a href="#ai-models" class="hover:text-white transition-colors">AI大模型</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">联系我们</h4>
+                    <p class="text-gray-400 mb-2">
+                        <i class="fa fa-envelope mr-2"></i>moyongj@mail3.sysu.edu.cn
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl">
+                            <i class="fa fa-weixin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl">
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
+                <p>墨大仙软件导航 | Designed by 莫永劲</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-blue-700">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 工具数据
+        const toolsData = {
+            "teacher-tools": [
+                { name: "Markdown转Word格式软件", url: "https://md2word.yay.boo/" },
+                { name: "轻量级图片合并软件", url: "https://imagem.yay.boo/" },
+                { name: "人民币大小写转换软件", url: "https://rmbdxx.yay.boo/" },
+                { name: "图片格式转换软件", url: "https://imagez.yay.boo/" },
+                { name: "文本序号添加和移除软件", url: "https://wbxuhao.yay.boo/" },
+                { name: "校园招聘数据分析软件", url: "https://zhaopin.yay.boo/" },
+                { name: "文件夹目录生成软件", url: "https://wjmulu.yay.boo/" },
+                { name: "批量生成文件夹软件", url: "https://wjpili.yay.boo/" },
+                { name: "键盘按键测试软件", url: "https://keyboard.yay.boo/" }
+            ],
+            "digital-tools": [
+                { name: "ICO图标转换软件", url: "https://icomake.yay.boo/" },
+                { name: "进制转换软件", url: "https://jinzhiz.yay.boo/" },
+                { name: "九宫格切图软件", url: "https://jiugong.yay.boo/" },
+                { name: "图片压缩软件", url: "https://imagey.yay.boo/" },
+                { name: "颜色值转换软件", url: "https://colorz.yay.boo/" },
+                { name: "字体版权查询软件", url: "https://zitibq.yay.boo/" },
+                { name: "重装系统教程软件", url: "https://system.yay.boo/" }
+            ],
+            "security-tools": [
+                { name: "AES加密解密软件", url: "https://aesjiami.yay.boo/" },
+                { name: "Argon2密码加固软件", url: "https://argon2.yay.boo/" },
+                { name: "BLAKE3高性能哈希软件", url: "https://blake3.yay.boo/" },
+                { name: "ChaCha20加密解密软件", url: "https://chacha20.yay.boo/" },
+                { name: "DES加密解密软件", url: "https://desjiami.yay.boo/" },
+                { name: "ECC椭圆曲线加密解密软件", url: "https://eccjiami.yay.boo/" },
+                { name: "EdDSA数字签名软件", url: "https://eddsa1.yay.boo/" },
+                { name: "IP地址转换软件", url: "https://ipaddress.yay.boo/" },
+                { name: "Rabbit加密解密软件", url: "https://rabbit.yay.boo/" },
+                { name: "RC4加密解密软件", url: "https://rc4jiami.yay.boo/" },
+                { name: "RSA非对称加密解密软件", url: "https://rsajiami.yay.boo/" },
+                { name: "SHA-3(Keccak)哈希校验软件", url: "https://sha3ha.yay.boo/" },
+                { name: "SHA-256哈希校验软件", url: "https://sha256.yay.boo/" },
+                { name: "SM4加密解密软件", url: "https://sm4jiami.yay.boo/" },
+                { name: "TripleDES加密解密软件", url: "https://triple.yay.boo/" },
+                { name: "二维码解析软件", url: "https://erweimaj.yay.boo/" },
+                { name: "二维码生成软件", url: "https://erweimas.yay.boo/" },
+                { name: "摩尔斯电码加密解密软件", url: "https://mosidm.yay.boo/" },
+                { name: "网络故障错误查询软件", url: "https://webguz.yay.boo/" },
+                { name: "正则表达式测试软件", url: "https://zhengz.yay.boo/" },
+                { name: "主机端口扫描软件", url: "https://portsm.yay.boo/" },
+                { name: "Wifi密码风险演示软件", url: "https://mimafx.yay.boo/" },
+                { name: "文字隐藏软件", url: "https://wenziy.yay.boo/" },
+                { name: "MAC地址查询软件", url: "https://macadd.yay.boo/" },
+                { name: "子网掩码计算软件", url: "https://ziwang.yay.boo/" },
+                { name: "CentOs 8 常用命令速查软件", url: "https://centos.yay.boo/" }
+            ],
+            "class-tools": [
+                { name: "随机小组抽号软件", url: "https://chouhao.yay.boo/" },
+                { name: "班级随机叫号答题与倒计时软件", url: "https://chouhao2.yay.boo/" }
+            ],
+            "shortcut-tools": [
+                { name: "Premiere 快捷键速查软件", url: "https://premiere.yay.boo/" },
+                { name: "After Effects 快捷键速查软件", url: "https://aftere.yay.boo/" },
+                { name: "Audition 快捷键速查软件", url: "https://audition.yay.boo/" },
+                { name: "Animate 快捷键速查软件", url: "https://animate.yay.boo/" },
+                { name: "Dreamweaver 快捷键速查软件", url: "https://dreamweaver.yay.boo/" },
+                { name: "Photoshop 快捷键速查软件", url: "https://photoshop.yay.boo/" },
+                { name: "Illustrator 快捷键速查软件", url: "https://illustrator.yay.boo/" },
+                { name: "Lightroom 快捷键速查软件", url: "https://lightroom.yay.boo/" },
+                { name: "Media Encoder 快捷键速查软件", url: "https://encode.yay.boo/" },
+                { name: "CorelDraw 快捷键速查软件", url: "https://coreldraw.yay.boo/" },
+                { name: "InDesign 快捷键速查软件", url: "https://indesign.yay.boo/" },
+                { name: "剪映快捷键速查软件", url: "https://jianying.yay.boo/" },
+                { name: "Davinci 快捷键速查软件", url: "https://davinci.yay.boo/" },
+                { name: "CentOs 8 快捷键速查软件", url: "https://centos8.yay.boo/" },
+                { name: "Windows 11 快捷键速查软件", url: "https://windows11.yay.boo/" },
+                { name: "Word 快捷键速查软件", url: "https://wordkey.yay.boo/" },
+                { name: "VSCode 快捷键速查软件", url: "https://vscode.yay.boo/" },
+                { name: "Excel 快捷键速查软件", url: "https://excelkey.yay.boo/" },
+                { name: "PowerPoint 快捷键速查软件", url: "https://pptkey.yay.boo/" },
+                { name: "VIM 快捷键速查软件", url: "https://vimkey.yay.boo/" },
+                { name: "WPS 快捷键速查软件", url: "https://wpskey.yay.boo/" }
+            ],
+            "ai-models": [
+                { name: "ChatGPT", url: "https://chat.openai.com/" },
+                { name: "文心一言", url: "https://yiyan.baidu.com/" },
+                { name: "讯飞星火", url: "https://xinghuo.xfyun.cn/" },
+                { name: "通义千问", url: "https://qianwen.aliyun.com/" },
+                { name: "Claude", url: "https://claude.ai/" },
+                { name: "豆包", url: "https://www.doubao.com/" },
+                { name: "Gemini", url: "https://gemini.google.com/" },
+                { name: "LLaMA 2", url: "https://ai.meta.com/resources/models-and-libraries/llama-downloads/" }
+            ],
+            "ai-image": [
+                { name: "MidJourney", url: "https://www.midjourney.com/" },
+                { name: "DALL·E 3", url: "https://openai.com/dall-e-3" },
+                { name: "Stable Diffusion", url: "https://stablediffusionweb.com/" },
+                { name: "美图AI", url: "https://ai.meitu.com/" },
+                { name: "PromeAI", url: "https://promeai.com/" },
+                { name: "文心一格", url: "https://yige.baidu.com/" },
+                { name: "Adobe Firefly", url: "https://firefly.adobe.com/" },
+                { name: "Canva AI", url: "https://www.canva.com/ai-image-generator/" }
+            ],
+            "ai-code": [
+                { name: "GitHub Copilot", url: "https://github.com/features/copilot" },
+                { name: "CodeGeeX", url: "https://codegeex.cn/" },
+                { name: "Tabnine", url: "https://www.tabnine.com/" },
+                { name: "Amazon CodeWhisperer", url: "https://aws.amazon.com/cn/codewhisperer/" },
+                { name: "CodeLlama", url: "https://ai.meta.com/resources/models-and-libraries/codellama/" },
+                { name: "Cursor", url: "https://www.cursor.com/" },
+                { name: "Codeium", url: "https://codeium.com/" },
+                { name: "Replit AI", url: "https://replit.com/" }
+            ]
+        };
+
+        // 直接设置分类统计数目的函数 - 采用更直接的方式
+        function setCategoryCounts() {
+            // 定义每个分类的预期数量
+            const counts = {
+                "teacher-count": 9,
+                "digital-count": 7,
+                "security-count": 26,
+                "class-count": 2,
+                "shortcut-count": 21,
+                "ai-models-count": 8,
+                "ai-image-count": 8,
+                "ai-code-count": 8
+            };
+            
+            // 直接设置每个计数元素的值
+            for (const [id, count] of Object.entries(counts)) {
+                // 使用setInterval确保元素加载完成
+                const interval = setInterval(() => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = count;
+                        console.log(`已设置 ${id} 的值为 ${count}`);
+                        clearInterval(interval);
+                    }
+                }, 100); // 每100ms尝试一次
+                
+                // 5秒后停止尝试，防止无限循环
+                setTimeout(() => {
+                    clearInterval(interval);
+                }, 5000);
+            }
+        }
+
+        // 生成工具卡片
+        function renderToolCards() {
+            for (const [category, tools] of Object.entries(toolsData)) {
+                try {
+                    const container = document.getElementById(`${category}-container`);
+                    if (!container) {
+                        console.error(`未找到容器: ${category}-container`);
+                        continue;
+                    }
+                    
+                    container.innerHTML = '';
+                    
+                    tools.forEach(tool => {
+                        const card = document.createElement('div');
+                        card.className = 'bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-100 dark:border-gray-700 card-hover';
+                        card.innerHTML = `
+                            <a href="${tool.url}" target="_blank" class="flex flex-col h-full">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="font-medium text-gray-900 dark:text-white line-clamp-2">${tool.name}</h3>
+                                    <i class="fa fa-external-link text-gray-400 text-sm"></i>
+                                </div>
+                                <div class="mt-auto pt-2 text-xs text-gray-500 dark:text-gray-400 truncate">
+                                    ${new URL(tool.url).hostname}
+                                </div>
+                            </a>
+                        `;
+                        container.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error(`渲染分类 ${category} 时出错:`, error);
+                }
+            }
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            // 先设置分类统计数目
+            setCategoryCounts();
+            
+            // 再渲染工具卡片
+            renderToolCards();
+            
+            // 移动端菜单切换
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // 主题切换
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            
+            if (themeToggle) {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    html.classList.add('dark');
+                } else {
+                    html.classList.remove('dark');
+                }
+                
+                themeToggle.addEventListener('click', () => {
+                    html.classList.toggle('dark');
+                    localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+                });
+            }
+            
+            // 回到顶部按钮
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            if (backToTopButton) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTopButton.classList.remove('opacity-0', 'invisible');
+                        backToTopButton.classList.add('opacity-100', 'visible');
+                    } else {
+                        backToTopButton.classList.remove('opacity-100', 'visible');
+                        backToTopButton.classList.add('opacity-0', 'invisible');
+                    }
+                });
+                
+                backToTopButton.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // 搜索功能
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            
+            if (searchInput && searchButton) {
+                function performSearch() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    if (!searchTerm) return;
+                    
+                    let found = false;
+                    
+                    for (const [category, tools] of Object.entries(toolsData)) {
+                        const matchingTool = tools.find(tool => 
+                            tool.name.toLowerCase().includes(searchTerm)
+                        );
+                        
+                        if (matchingTool) {
+                            const targetElement = document.getElementById(category);
+                            if (targetElement) {
+                                targetElement.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                                
+                                setTimeout(() => {
+                                    const cards = document.querySelectorAll(`#${category}-container .card-hover`);
+                                    cards.forEach((card, index) => {
+                                        if (tools[index].name.toLowerCase().includes(searchTerm)) {
+                                            card.classList.add('ring-2', 'ring-primary');
+                                            setTimeout(() => {
+                                                card.classList.remove('ring-2', 'ring-primary');
+                                            }, 2000);
+                                        }
+                                    });
+                                }, 500);
+                                
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!found) {
+                        alert(`未找到包含"${searchTerm}"的工具`);
+                    }
+                }
+                
+                searchButton.addEventListener('click', performSearch);
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+    
